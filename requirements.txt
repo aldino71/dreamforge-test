@@ -1,0 +1,8 @@
+openai==0.27.0
+requests==2.26.0
+PyQt5==5.15.4
+pandas==1.3.3
+numpy==1.21.2
+matplotlib==3.4.3
+sqlite==3.36.0   # SQLite database engine
+SQLAlchemy==1.4.23  # ORM library for working with databases
