@@ -1,9 +1,11 @@
 /* static/css/styles.css */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Your Chosen Font', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #6a748b;
+    background-image: url('../img/background.jpg'); /* Add your background image path */
+    background-size: cover;
 }
 
 #app {
@@ -12,9 +14,9 @@ body {
 }
 
 h1 {
-    color: #333;
+    color: #fff; /* Change text color for better visibility on the background */
 }
 
 p {
-    color: #666;
+    color: #eee; /* Adjust text color for better visibility */
 }
