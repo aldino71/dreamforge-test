@@ -5,20 +5,20 @@
     <!-- Head content goes here -->
 </head>
 <body>
+    <header>
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="D&D Logo">
+        <img style='height: 50%; width: 50%; object-fit: contain'/>
+        <h1>Dreamforge</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+            </ul>
+        </nav>
+    </header>
     <div id="app">
-        <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/index.js') }}"></script>    
-        <header>
-            <h1>D&D Chatbot</h1>
-            <nav>
-                <ul>
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}">About</a></li>
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
-                </ul>
-            </nav>
-        </header>
         <main>
             {% block content %}{% endblock %}
         </main>
@@ -27,5 +27,6 @@
         </footer>
     </div>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>    
 </body>
 </html>

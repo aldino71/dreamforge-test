@@ -1,4 +1,6 @@
 /* static/css/styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Your+Chosen+Font&display=swap');
+
 body {
     font-family: 'Your Chosen Font', Arial, sans-serif;
     margin: 0;
@@ -13,10 +15,78 @@ body {
     padding: 50px;
 }
 
+#app {
+    padding: 50px;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+header h1 {
+    color: #fff;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+}
+
 h1 {
     color: #fff; /* Change text color for better visibility on the background */
 }
 
 p {
     color: #eee; /* Adjust text color for better visibility */
+}
+
+.hero {
+    padding: 50px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+}
+
+.hero img {
+    max-width: 100%;
+    height: auto;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.feature {
+    text-align: center;
+}
+
+.feature img {
+    max-width: 100%;
+    height: auto;
+}
+
+.feature h3 {
+    color: #fff;
+}
+
+.feature p {
+    color: #eee;
 }
