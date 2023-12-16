@@ -1,0 +1,5 @@
+background (tropical indigo): AFA2FF
+text (dark brown): 2F2504
+cards and icons (peach yellow): ECCE8E
+highlight 1 (english violet): 694873
+highlight 2 (puprle): 7E007B

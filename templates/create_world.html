@@ -1,0 +1,16 @@
+<!-- templates/create_world.html -->
+{% extends 'index.html' %}
+
+{% block content %}
+    <div id="app">
+        <section id="create-world">
+            <h2>Worldbuilding Presets</h2>
+            <!-- Add your create world form here -->
+            <p>Selected Options: {{ options }}</p>
+            <p>Additional Input: {{ additionalInput }}</p>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
