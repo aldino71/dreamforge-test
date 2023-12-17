@@ -1,11 +1,14 @@
 // src/components/Login.js
 import React from 'react';
+import Navigator from './Navigator';
 
 const Login = () => {
   return (
     <div>
-      <h2>Login or Register</h2>
-      {/* Add login and registration form */}
+      <Navigator />
+      {/* Rest of your content */}
+      <h1>Login or Register</h1>
+      <p>Scroll down to explore more:</p>
     </div>
   );
 };

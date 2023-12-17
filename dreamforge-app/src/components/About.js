@@ -1,11 +1,14 @@
 // src/components/About.js
 import React from 'react';
+import Navigator from './Navigator';
 
 const About = () => {
   return (
     <div>
-      <h2>About D&D ChatBot</h2>
-      <p>Information about the project, legal details, etc.</p>
+      <Navigator />
+      {/* Rest of your content */}
+      <h1>About page.</h1>
+      <p>Scroll down to explore more:</p>
     </div>
   );
 };

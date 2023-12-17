@@ -1,6 +1,15 @@
-/project-folder
-|-- templates
-|   |-- index.html
-|-- static
-|   |-- style.css
-|-- app.py
+project-root/
+|-- dreamforge-app/
+|   |-- public/
+|   |-- src/
+|   |-- ...
+|   |-- package.json
+|   |-- ...
+|
+|-- backend/
+|   |-- app.py
+|   |-- ...
+|
+|-- ...
+|-- package.json
+|-- ...
