@@ -16,16 +16,29 @@ const ChatBot = () => {
     setSelectedOptions(selectedValues);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Create JSON object with user selections
-    const chatbotConfig = {
-      purpose,
-      selectedOptions,
-      additionalInfo,
-    };
-    // Send the JSON to the backend (to be implemented)
-    console.log(chatbotConfig);
+    try {
+      const response = await fetch('http://localhost:5000/process-config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purpose,
+          selectedOptions,
+          additionalInfo,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Configuration submitted successfully');
+      } else {
+        console.error('Failed to submit configuration', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting configuration:', error);
+    }
   };
 
   return (
