@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  const [data, setData] = useState([{}])
   return (
     <div className="App">
       <header className="App-header">
@@ -19,7 +21,6 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
-
-export default App;
+export default App
