@@ -5,10 +5,11 @@ const ChatBot = () => {
   const [purpose, setPurpose] = useState('');
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [additionalInfo, setAdditionalInfo] = useState('');
+  const [responseMessage, setResponseMessage] = useState(null);
 
   const handlePurposeChange = (event) => {
     setPurpose(event.target.value);
-    setSelectedOptions([]); // Reset selectedOptions when purpose changes
+    setSelectedOptions([]);
   };
 
   const handleOptionsChange = (event) => {
@@ -32,14 +33,16 @@ const ChatBot = () => {
       });
 
       if (response.ok) {
-        console.log('Configuration submitted successfully');
+        const responseData = await response.json();
+        setResponseMessage(responseData.responseMessage);
       } else {
-        console.error('Failed to submit configuration', response.statusText);
+        setResponseMessage(`Failed to submit configuration: ${response.statusText}`);
       }
     } catch (error) {
-      console.error('Error submitting configuration:', error);
+      setResponseMessage(`Error submitting configuration: ${error.message}`);
     }
   };
+
 
   return (
     <div>
@@ -100,6 +103,7 @@ const ChatBot = () => {
 
         <button type="submit">Submit</button>
       </form>
+      {responseMessage && <p>{responseMessage}</p>}
     </div>
   );
 };

@@ -8,6 +8,7 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requ
 def process_config():
     try:
         data = request.json
+        print(type(data))
         print("Received Configuration:")
         print("Purpose:", data.get('purpose'))
         print("Selected Options:", data.get('selectedOptions'))
@@ -15,7 +16,11 @@ def process_config():
 
         # Here, you can implement logic to interact with OpenAI or perform other tasks
 
-        return jsonify({'success': True, 'message': 'Configuration processed successfully'})
+        response_message = f"You have selected {data.get('selectedOptions')} with additional input: {data.get('additionalInfo')}"
+
+        json_res = jsonify({'success': True, 'message': 'Configuration processed successfully', 'responseMessage':response_message})
+        print("JSON Res Success")
+        return json_res
     except Exception as e:
         print("Exception raised.")
         return jsonify({'success': False, 'error': str(e)})
