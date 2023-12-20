@@ -4,7 +4,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requests from http://localhost:3000
 
-@app.route('/process-config', methods=['GET', 'POST'])
+@app.route('/chatbot-config', methods=['GET', 'POST'])
 def process_config():
     try:
         data = request.json
@@ -17,12 +17,20 @@ def process_config():
         # Here, you can implement logic to interact with OpenAI or perform other tasks
 
         response_message = f"You have selected {data.get('selectedOptions')} with additional input: {data.get('additionalInfo')}"
-
-        json_res = jsonify({'success': True, 'message': 'Configuration processed successfully', 'responseMessage':response_message})
-        print("JSON Res Success")
-        return json_res
+        return jsonify({'success': True, 'message': 'Configuration processed successfully', 'responseMessage':response_message})
     except Exception as e:
-        print("Exception raised.")
+        print("Exception raised (FC):")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/chatbot-home-config', methods=['GET'])
+def get_prompt_response():
+    try:
+        # Here you can implement logic to generate a response based on the received prompt
+        # For simplicity, let's return a fixed message
+        print("Received Home Configuration:")
+        return jsonify({'success': True, 'message': 'Hello Ork World!'})
+    except Exception as e:
+        print("Exception Raised (FH):")
         return jsonify({'success': False, 'error': str(e)})
 
 if __name__ == '__main__':

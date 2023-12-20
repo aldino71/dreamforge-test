@@ -20,7 +20,7 @@ const ChatBot = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/process-config', {
+      const response = await fetch('http://localhost:5000/chatbot-config', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,6 +46,9 @@ const ChatBot = () => {
 
   return (
     <div>
+      <br></br>
+      <br></br>
+      <br></br>
       <h1>ChatBot Configuration</h1>
       <p>Select options below</p>
       <form onSubmit={handleSubmit}>

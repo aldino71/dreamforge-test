@@ -6,6 +6,9 @@ const Login = () => {
   return (
     <div>
       <Navigator />
+      <br></br>
+      <br></br>
+      <br></br>
       {/* Rest of your content */}
       <h1>Login or Register</h1>
       <p>Scroll down to explore more:</p>
