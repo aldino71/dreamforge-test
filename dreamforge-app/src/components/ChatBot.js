@@ -1,8 +1,10 @@
 // src/components/ChatBot.js
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import './ChatBot.css'; // Import the CSS file
 
 const ChatBot = () => {
+  const navigate = useNavigate();
   const [purpose, setPurpose] = useState('');
   const [naturalEnvironment, setNaturalEnvironment] = useState('');
   const [structuralDesign, setStructuralDesign] = useState('');
@@ -14,10 +16,17 @@ const ChatBot = () => {
   const [mysteries, setMysteries] = useState('');
   const [notables, setNotableNPC] = useState('');
   const [lootAndRumors, setLootRumors] = useState('');
+  const [mapLegend, setMapLegend] = useState(false);   
+  const [roomLegend, setRoomLegend] = useState(false);
   const [responseMessage, setResponseMessage] = useState(null);
 
   const handlePurposeChange = (event) => {
-    setPurpose(event.target.value);
+    const newPurpose = event.target.value;
+
+    // Reset state variables when ChatBot Purpose changes
+    setPurpose(newPurpose);
+    setMapLegend(false);
+    setRoomLegend(false);
   };
 
   const handleSubmit = async (event) => {
@@ -40,12 +49,15 @@ const ChatBot = () => {
           lootAndRumors,
           recentInfluence,
           inhabitants,
+          mapLegend,
+          roomLegend
         }),
       });
 
       if (response.ok) {
         const responseData = await response.json();
-        setResponseMessage(responseData.responseMessage);
+        // Navigate to a new page and pass the response data as a parameter
+        navigate('/generated-location', { state: { responseData } });
       } else {
         setResponseMessage(`Failed to submit configuration: ${response.statusText}`);
       }
@@ -74,10 +86,10 @@ const ChatBot = () => {
           <br></br>
           <select value={purpose} onChange={handlePurposeChange}>
             <option value="">Select Purpose</option>
-            <option value="CreateVillage">Create Village</option>
-            <option value="CreateTown">Create Town</option>
-            <option value="CreateBuilding">Create Building</option>
-            <option value="CreateDungeon">Create Dungeon</option>
+            <option value="Village">Create Village</option>
+            <option value="Town">Create Town</option>
+            <option value="Building">Create Building</option>
+            <option value="Dungeon">Create Dungeon</option>
           </select>
         </label>
 
@@ -85,6 +97,7 @@ const ChatBot = () => {
           <>
             <div>
               <label>
+                -----------------------------------------<br></br>
                 Natural Environment:
                 <br />
                 <span className="parameter-description">
@@ -251,10 +264,63 @@ const ChatBot = () => {
                 />
               </label>
             </div>
+
+            {purpose === 'Town' && (
+              <div>
+                <label>
+                  Map Legend:
+                  <input
+                    type="checkbox"
+                    checked={mapLegend}
+                    onChange={() => setMapLegend(!mapLegend)}
+                  />
+                </label>
+              </div>
+            )}
+
+            {purpose === 'Dungeon' && (
+              <div>
+                <label>
+                  Room Legend:
+                  <input
+                    type="checkbox"
+                    checked={roomLegend}
+                    onChange={() => setRoomLegend(!roomLegend)}
+                  />
+                </label>
+              </div>
+            )}
+
+            {purpose === 'Village' && (
+              <div>
+                <label>
+                  Map Legend:
+                  <input
+                    type="checkbox"
+                    checked={mapLegend}
+                    onChange={() => setMapLegend(!mapLegend)}
+                  />
+                </label>
+              </div>
+            )}
+
+            {purpose === 'Building' && (
+              <div>
+                <label>
+                  Room Legend:
+                  <input
+                    type="checkbox"
+                    checked={roomLegend}
+                    onChange={() => setRoomLegend(!roomLegend)}
+                  />
+                </label>
+              </div>
+            )}
           </>
         )}
-
-        <button type="submit">Submit</button>
+        <br></br>-----------------------------------------
+        <br></br>
+        <button type="submit">Generate Location</button>
       </form>
       {responseMessage && <p>{responseMessage}</p>}
     </div>
