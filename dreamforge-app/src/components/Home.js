@@ -1,7 +1,6 @@
 // src/components/Home.js
 import React, { useState, useEffect } from 'react';
 
-
 const Home = () => {
   const [promptResponse, setPromptResponse] = useState('');
   const [displayedResponse, setDisplayedResponse] = useState('');
@@ -37,9 +36,9 @@ const Home = () => {
   };
 
   const displayResponseCharacterByCharacter = () => {
-    const delay = 50; // Adjust the delay between characters (in milliseconds)
+    const delay = 10; // Adjust the delay between characters (in milliseconds)
 
-      // Ensure promptResponse is defined
+    // Ensure promptResponse is defined
     if (!promptResponse) {
       return;
     }
@@ -61,12 +60,10 @@ const Home = () => {
       <br></br>
       <br></br>
       <h2>Welcome to the D&D ChatBot</h2>
-      <p>Example Prompt: Describe, in detail, the fortress of an Ork Stronghold. It is located in a taiga biome and the Orks are known for hunting monsters in the area.</p>
-      
+      <p>Example Prompt: <br></br>Describe, in detail, the fortress of an Ork Stronghold. It is located in a taiga biome and the Orks are known for hunting monsters in the area.</p>
       <button onClick={handleGetPromptResponse} disabled={isDisplaying}>
         {isDisplaying ? 'Getting Response...' : 'Get Prompt Response'}
       </button>
-
       {isDisplaying && <p>{displayedResponse}</p>}
       {!isDisplaying && promptResponse && <p>{promptResponse}</p>}
     </div>
@@ -74,3 +71,4 @@ const Home = () => {
 };
 
 export default Home;
+
