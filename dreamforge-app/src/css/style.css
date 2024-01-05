@@ -1,0 +1,78 @@
+.welcome {
+    background-color: #d5cfff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .welcome .nav-bar-wrapper {
+    background-color: var(--light-indigo);
+    height: 1899px;
+    width: 1440px;
+  }
+  
+  .welcome .nav-bar {
+    background-color: var(--brown);
+    height: 82px;
+    position: relative;
+  }
+  
+  .welcome .text-wrapper {
+    color: var(--light-indigo);
+    font-family: "Nova Round-Book", Helvetica;
+    font-size: 26px;
+    font-weight: 400;
+    left: 70px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 24px;
+    white-space: nowrap;
+  }
+  
+  .welcome .div {
+    color: var(--light-indigo);
+    font-family: "Nova Round-Book", Helvetica;
+    font-size: 18px;
+    font-weight: 400;
+    left: 1261px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 28px;
+  }
+  
+  .welcome .text-wrapper-2 {
+    color: var(--light-indigo);
+    font-family: "Nova Round-Book", Helvetica;
+    font-size: 18px;
+    font-weight: 400;
+    left: 1166px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 28px;
+  }
+  
+  .welcome .text-wrapper-3 {
+    color: var(--light-indigo);
+    font-family: "Nova Round-Book", Helvetica;
+    font-size: 18px;
+    font-weight: 400;
+    left: 958px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    top: 28px;
+  }
+  
+  .welcome .lightv-removebg {
+    height: 74px;
+    left: 210px;
+    object-fit: cover;
+    position: absolute;
+    top: 3px;
+    width: 93px;
+  }
+  

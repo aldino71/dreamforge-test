@@ -7,10 +7,6 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requests from http://localhost:3000
 
-@app.route('/')
-def home():
-    return render_template('index.html')
-
 @app.route('/chatbot-config', methods=['GET', 'POST'])
 def process_config():
     try:

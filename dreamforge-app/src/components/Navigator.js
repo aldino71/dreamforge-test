@@ -8,7 +8,7 @@ const Navigator = () => {
     <nav>
       <div className="logo">
         <Link to="/">
-          <p>DreamForge</p>
+          <p>Dreamforge</p>
         </Link>
       </div>
       <ul>

@@ -1,5 +1,6 @@
-background (tropical indigo): AFA2FF
-text (dark brown): 2F2504
-cards and icons (peach yellow): ECCE8E
-highlight 1 (english violet): 694873
-highlight 2 (puprle): 7E007B
+background (tropical indigo): D6CFFF
+text (black)
+accent 1 (russian violet): #1F093D
+accent 2 (sapphere): 0356A9
+accent 3 (celedon): 72D4Ad
+accent 4 (brown): #42312D
