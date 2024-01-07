@@ -1,20 +1,42 @@
 // src/components/GeneratedLocation.js
 
-import React from 'react';
+import React, {useState} from 'react';
 import { useLocation } from 'react-router-dom';
 
 const GeneratedLocation = () => {
-  const location = useLocation();
-  const responseData = location.state?.responseData || {};
+  const [responseMessage, setResponseMessage] = useState('');
+
+  const handleGenerateLocation = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/generate-location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          response
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        setResponseMessage(responseData.message);
+      } else {
+        setResponseMessage(`Failed to generate location: ${response.statusText}`);
+      }
+    } catch (error) {
+      setResponseMessage(`Error generating location: ${error.message}`);
+    }
+  };
 
   return (
     <div>
       <h1>Generated Location</h1>
-      <p>Generated Response: {responseData.generated_response}</p>
-      <p>Additional Info: {responseData.additional_info}</p>
-      {/* ... (display other information based on the JSON response) */}
+      <button onClick={handleGenerateLocation}>Generate Location</button>
+      {responseMessage && <p>{responseMessage}</p>}
     </div>
   );
 };
 
 export default GeneratedLocation;
+

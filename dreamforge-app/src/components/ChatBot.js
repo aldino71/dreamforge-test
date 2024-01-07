@@ -32,7 +32,7 @@ const ChatBot = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/chatbot-config', {
+      const response = await fetch('http://localhost:5000/generate-location', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

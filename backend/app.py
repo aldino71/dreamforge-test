@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requests from http://localhost:3000
 
-@app.route('/chatbot-config', methods=['GET', 'POST'])
+@app.route('/generate-location', methods=['GET', 'POST'])
 def process_config():
     try:
         data = request.get_json()
@@ -34,6 +34,8 @@ def process_config():
 
         # Call genResponse to aquire OpenAI output
         response_dict = gen_response(parameters)
+        print("Dict Object:")
+        print(response_dict)
 
         # Return a response
         return jsonify(response_dict)
@@ -107,6 +109,7 @@ def gen_response(parameters):
     prompt += f"Items, Rumors, Secrets, and Treasure: {parameters['lootAndRumors']}\n"
     prompt += f"Recent Events at Location: {parameters['recent_influence']}\n"
     prompt += f"Population and Inhabitants: {parameters['inhabitants']}\n"
+    print(prompt)
 
     # Call OpenAI API to get a response
     #gpt_response = openai.Completion.create(
@@ -126,8 +129,6 @@ def gen_response(parameters):
         'generated_response': generated_response,
         'additional_info': 'Any additional info you want to include',
     }
-    print("Response")
-    print(response_dict)
 
     return response_dict
 
