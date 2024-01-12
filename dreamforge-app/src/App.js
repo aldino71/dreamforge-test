@@ -6,12 +6,11 @@ import Login from './components/Login';
 import About from './components/About';
 import ChatBot from './components/ChatBot';
 import Navigator from './components/Navigator';
-import GeneratedLocation from './components/GeneratedLocation';
-import './css/style.css';
+import './App.css';
 
 const App = () => {
   return (
-    <div className="primary">
+    <div className="App">
       <Router>
         <Navigator />
         <Routes>
@@ -19,7 +18,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/chatbot/*" element={<ChatBot />} />
-          <Route path="/chatbot/generated-location" element={<GeneratedLocation />} />
         </Routes>
       </Router>
     </div>

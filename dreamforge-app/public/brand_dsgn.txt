@@ -1,0 +1,6 @@
+background (tropical indigo): D6CFFF
+text (black)
+accent 1 (russian violet): #1F093D
+accent 2 (sapphere): 0356A9
+accent 3 (celedon): 72D4Ad
+accent 4 (brown): #42312D

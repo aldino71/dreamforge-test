@@ -2,53 +2,17 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import openai
 import os
+import random
+import string
 #openai.api_key = os.environ.get['OPENAI_API_KEY']
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requests from http://localhost:3000
-
-@app.route('/generate-location', methods=['GET', 'POST'])
-def process_config():
-    try:
-        data = request.get_json()
-
-        # Extract data from the JSON request
-        parameters = {
-        'purpose': data.get('purpose'),
-        'natural_environment' :data.get('naturalEnvironment'),
-        'structural_design' :data.get('structuralDesign'),
-        'atmosphere' :data.get('atmosphere'),
-        'history' :data.get('history'),
-        'notables' :data.get('notables'),
-        'mysteries' :data.get('mysteries'),
-        'culture' :data.get('culture'),
-        'lootAndRumors' :data.get('lootAndRumors'),
-        'recent_influence' :data.get('recentInfluence'),
-        'map_legend' :data.get('mapLegend'),
-        'room_legend' :data.get('roomLegend'),
-        'inhabitants' :data.get('inhabitants')
-        }
-        print('Parameters recieved:')
-        print(parameters)
-        print("----------------")
-
-        # Call genResponse to aquire OpenAI output
-        response_dict = gen_response(parameters)
-        print("Dict Object:")
-        print(response_dict)
-
-        # Return a response
-        return jsonify(response_dict)
-
-    except Exception as e:
-        # Handle exceptions appropriately
-        print(f"Error processing configuration: {str(e)}")
-        return jsonify({'responseMessage': 'Error processing configuration'}), 500
-
+chatbot_configs = {}
 
 @app.route('/chatbot-home-config', methods=['GET', 'POST'])
 def get_prompt_response():
-    ex_message = '''
+    ex_message = """
     Welcome to the Ork Stronghold of Frostfang Fortress, nestled deep within the heart of the taiga biome. This formidable fortress stands as a testament to the strength and savagery of the Ork warbands that call it home. As you approach through the dense, snow-laden trees, the air is filled with the scent of pine and the distant roars of monsters echoing through the frosty wilderness.
 
     \n Exterior:
@@ -74,16 +38,63 @@ def get_prompt_response():
     The taiga around Frostfang Fortress is a treacherous and unforgiving landscape. The Orks venture deep into the wilderness to face off against fearsome monsters, bringing back trophies and resources to sustain their stronghold. The trees are twisted and covered in snow, and the frozen lakes conceal dangerous creatures beneath their icy surfaces.
 
     Frostfang Fortress stands as a bastion of Ork strength in the frozen wilderness, a place where the call of battle and the thrill of the hunt echo through the taiga, leaving a mark on both the land and those who dare to challenge the might of the Orks.
-    '''
+    """
     try:
         # Here you can implement logic to generate a response based on the received prompt
         # For simplicity, let's return a fixed message
         return jsonify({'success': True, 'message': ex_message})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
-    
+
+@app.route('/generate-location', methods=['GET', 'POST'])
+def process_config():
+    try:
+        print("____Data Here____")
+        data = request.get_json()
+        print(data)
+
+        # Extract data from the JSON request
+        parameters = {
+        'purpose': data.get('purpose'),
+        'natural_environment' :data.get('naturalEnvironment'),
+        'structural_design' :data.get('structuralDesign'),
+        'atmosphere' :data.get('atmosphere'),
+        'history' :data.get('history'),
+        'notables' :data.get('notables'),
+        'mysteries' :data.get('mysteries'),
+        'culture' :data.get('culture'),
+        'lootAndRumors' :data.get('lootAndRumors'),
+        'recent_influence' :data.get('recentInfluence'),
+        'map_legend' :data.get('mapLegend'),
+        'room_legend' :data.get('roomLegend'),
+        'inhabitants' :data.get('inhabitants')
+        }
+
+        # Call genResponse to aquire OpenAI output
+        response_dict = gen_response(parameters)
+
+        dreamsmith_id = gen_dreamsmith_id()
+        print(dreamsmith_id)
+
+        chatbot_configs[dreamsmith_id] = response_dict
+
+        response_dict['dreamsmith_ID'] = dreamsmith_id
+
+        # Return a response
+        return jsonify(response_dict)
+
+    except Exception as e:
+        # Handle exceptions appropriately
+        print({str(e)})
+        print(f"Error processing configuration: {str(e)}")
+        return jsonify({'responseMessage': 'Error processing configuration'}), 500
+
 
 #########################################################################
+    
+def gen_dreamsmith_id():
+    new_ID = ''.join(random.choices(string.ascii_uppercase+string.digits, k=6))
+    return new_ID
 
 def gen_response(parameters):
     # Construct a prompt using the parameters
@@ -102,14 +113,13 @@ def gen_response(parameters):
     prompt += f"Natural Environment: {parameters['natural_environment']}\n"
     prompt += f"Architectural/Structural Design: {parameters['structural_design']}\n"
     prompt += f"Atmosphere and Theme: {parameters['atmosphere']}\n"
-    prompt += f"history: {parameters['history']}\n"
+    prompt += f"History: {parameters['history']}\n"
     prompt += f"Notable Characters or Creatures: {parameters['notables']}\n"
     prompt += f"Secrets and Mysteries: {parameters['mysteries']}\n"
     prompt += f"Cultures and Traditions: {parameters['culture']}\n"
     prompt += f"Items, Rumors, Secrets, and Treasure: {parameters['lootAndRumors']}\n"
     prompt += f"Recent Events at Location: {parameters['recent_influence']}\n"
     prompt += f"Population and Inhabitants: {parameters['inhabitants']}\n"
-    print(prompt)
 
     # Call OpenAI API to get a response
     #gpt_response = openai.Completion.create(
@@ -129,6 +139,8 @@ def gen_response(parameters):
         'generated_response': generated_response,
         'additional_info': 'Any additional info you want to include',
     }
+    print("____Response Here____")
+    print(response_dict)
 
     return response_dict
 

@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import './ChatBot.css'; // Import the CSS file
+//
 
 const ChatBot = () => {
   const navigate = useNavigate();
   const [purpose, setPurpose] = useState('');
+  const [dreamsmithID, setDreamsmithID] = useState('')
   const [naturalEnvironment, setNaturalEnvironment] = useState('');
   const [structuralDesign, setStructuralDesign] = useState('');
   const [atmosphere, setAtmosphere] = useState('');
@@ -57,7 +59,8 @@ const ChatBot = () => {
       if (response.ok) {
         const responseData = await response.json();
         // Navigate to a new page and pass the response data as a parameter
-        navigate('/generated-location', { state: { responseData } });
+        setDreamsmithID(responseData.dreamsmithID)
+        window.open('/generated-location/${responseData.dreamsmithID}','_blank');
       } else {
         setResponseMessage(`Failed to submit configuration: ${response.statusText}`);
       }
@@ -71,17 +74,17 @@ const ChatBot = () => {
       <br />
       <br />
       <br />
-      <h1>ChatBot Configuration</h1>
-      <p>Select purpose and provide information</p>
+      <h1>Dreamsmith Configuration</h1>
+      <p>Configure your dreamsmith below:</p>
       <br></br>
       <form onSubmit={handleSubmit}>
         <label>
-          Choose a Location Generator:
+          Choose a location to generate:
           <label>
-            <br></br>1. - Village - Populates a village with a name, inhabitants, and a few buildings. Creates a small amount of backstory for the village.
-            <br></br>2. Town - Complex version of Village selection. Includes Village output along with buildings and guilds with larger historical/cultural background.
+            <br></br>1. Village - Populates a village with a name, inhabitants, and a few buildings. Creates a small amount of backstory for the village.
+            <br></br>2. Town - More complex version of 'Village'. Includes Village output along with buildings and guilds with larger historical/cultural background.
             <br></br>3. Dungeon - Creates a dungeon with a specific creature/organization in mind. Fleshes out the dungeon’s design in relation to the inhabitants activities.
-            <br></br>4. Building - Similar to dungeon parameter, but heavily reducing the traps, monsters, and loot. 
+            <br></br>4. Building - Similar to 'Dungeon', but heavily reducing the traps, monsters, and loot. 
           </label>
           <br></br>
           <select value={purpose} onChange={handlePurposeChange}>
@@ -323,6 +326,9 @@ const ChatBot = () => {
         <button type="submit">Generate Location</button>
       </form>
       {responseMessage && <p>{responseMessage}</p>}
+      <div>
+        {dreamsmithID && <p> Unique Dreamsmith Code: {dreamsmithID}</p>}
+      </div>
     </div>
   );
 };
