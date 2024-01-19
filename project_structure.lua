@@ -1,6 +1,8 @@
 project-root/
 |-- dreamforge-app/
 |   |-- public/
+        -- imgs/
+        -- brand_dsgn
 |   |-- src/
         --components/
             --web pages

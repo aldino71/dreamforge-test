@@ -42,6 +42,7 @@ const Home = () => {
     if (!promptResponse) {
       return;
     }
+    console.log(typeof (promptResponse))
 
     for (let i = 0; i < promptResponse.length; i++) {
       setTimeout(() => {
@@ -59,8 +60,21 @@ const Home = () => {
       <br></br>
       <br></br>
       <br></br>
-      <h2>Welcome to the D&D ChatBot</h2>
-      <p>Example Prompt: <br></br>Describe, in detail, the fortress of an Ork Stronghold. It is located in a taiga biome and the Orks are known for hunting monsters in the area.</p>
+      <h2>Welcome to the Dreamforge!</h2>
+      <p> Dreamforge is a service that will produce personalized Dreamsmiths to build your Dungeons and Dragons world.</p>
+      <br></br>
+      <p>What is a Dreamsmith?</p> <br></br>
+      <p>A dreamsmith is an OpenAI GPT instance that will take user inputs on a desired location and generate a concept for that place you have in mind.
+
+      </p><br></br>
+      <p>Example Prompt:
+      <br></br> Create a Kobold Dungeon.
+      <br></br> Include the Kobold Matriarch, Zarrin. She has one eye and is a pyromaniac.
+      <br></br> The dungeon should be the ruins of an old monastary. Include lots of loose stone and dirt.
+      <br></br> The monastary was taken over by dark sorcers decades ago. Include some of their ancient altars and influence before the Kobold moved in.
+      <br></br> The Kobolds have stolen from the local villages: Morris's Rest and Featherington.
+      </p>
+
       <button onClick={handleGetPromptResponse} disabled={isDisplaying}>
         {isDisplaying ? 'Getting Response...' : 'Get Prompt Response'}
       </button>

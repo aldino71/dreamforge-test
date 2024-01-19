@@ -9,8 +9,23 @@
     <title>Response</title>
 </head>
 <body>
-    <h1>Generated Response</h1>
-    <p>{{ response.generated_response }}</p>
-    <p>{{ response.additional_info }}</p>
+ 
+    <div>
+<!-- url_for will route the forms request to 
+appropriate function that user made to handle it.-->
+<!--we will Retrieve submitted values of inputs 
+on the backend side using 'name' field of form.-->
+        <h1>Handle GET Request</h1>
+        <form method="GET"
+              action="{{ url_for('handle_get') }}">
+        </form>
+    </div>
+ 
+    <div>
+        <h1>Handle POST Request</h1>
+        <form method="POST"
+              action="{{ url_for('handle_post') }}">
+        </form>
+    </div>
 </body>
 </html>

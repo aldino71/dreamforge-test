@@ -34,7 +34,22 @@ const ChatBot = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/generate-location', {
+      console.log(JSON.stringify({
+        purpose,
+        naturalEnvironment,
+        structuralDesign,
+        atmosphere,
+        history,
+        notables,
+        mysteries,
+        culture,
+        lootAndRumors,
+        recentInfluence,
+        inhabitants,
+        mapLegend,
+        roomLegend
+      }))
+      const response = await fetch('http://localhost:5000/dreamsmith-post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,9 +73,11 @@ const ChatBot = () => {
 
       if (response.ok) {
         const responseData = await response.json();
+        console.log("response below")
+        console.log(responseData)
         // Navigate to a new page and pass the response data as a parameter
         setDreamsmithID(responseData.dreamsmithID)
-        window.open('/generated-location/${responseData.dreamsmithID}','_blank');
+        window.open('/generated-location-test/','_blank');
       } else {
         setResponseMessage(`Failed to submit configuration: ${response.statusText}`);
       }

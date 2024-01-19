@@ -1,42 +1,46 @@
-// src/components/GeneratedLocation.js
+// GeneratedLocation.js
 
-import React, {useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const GeneratedLocation = () => {
-  const [responseMessage, setResponseMessage] = useState('');
+  const { chatbotId } = useParams();
+  const [parameters, setParameters] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleGenerateLocation = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/generate-location', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          response
-        }),
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        setResponseMessage(responseData.message);
-      } else {
-        setResponseMessage(`Failed to generate location: ${response.statusText}`);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/dreamsmith-get`);
+        if (response.ok) {
+          const data = await response.json();
+          setParameters(data.parameters);
+        } else {
+          const data = await response.json();
+          setError(data.error);
+        }
+      } catch (error) {
+        setError(error.toString());
       }
-    } catch (error) {
-      setResponseMessage(`Error generating location: ${error.message}`);
-    }
-  };
+    };
+
+    fetchData();
+  });
 
   return (
     <div>
       <h1>Generated Location</h1>
-      <button onClick={handleGenerateLocation}>Generate Location</button>
-      {responseMessage && <p>{responseMessage}</p>}
+      <h1>Test</h1>
+      {parameters && (
+        <div>
+          <p>ChatBot ID: {chatbotId}</p>
+          <p>Parameters:</p>
+          <pre>{JSON.stringify(parameters, null, 2)}</pre>
+        </div>
+      )}
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };
 
 export default GeneratedLocation;
-

@@ -1,5 +1,9 @@
 from flask import Flask, request, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from chatbot_config import gen_response
+from chatbot_config import gen_dreamsmith_id
+
 import openai
 import os
 import random
@@ -10,35 +14,46 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Allow requests from http://localhost:3000
 chatbot_configs = {}
 
-@app.route('/chatbot-home-config', methods=['GET', 'POST'])
+test_data = {}
+
+@app.route('/dreamforge-home-config', methods=['GET', 'POST'])
 def get_prompt_response():
     ex_message = """
-    Welcome to the Ork Stronghold of Frostfang Fortress, nestled deep within the heart of the taiga biome. This formidable fortress stands as a testament to the strength and savagery of the Ork warbands that call it home. As you approach through the dense, snow-laden trees, the air is filled with the scent of pine and the distant roars of monsters echoing through the frosty wilderness.
-
-    \n Exterior:
-    Frostfang Fortress is a massive, imposing structure built from rough-hewn logs, enormous stones, and the bones of formidable monsters conquered by the Orks. Tall wooden walls, adorned with gruesome trophies such as the skulls of dire wolves and frost giants, surround the stronghold. The outer defenses include sharpened stakes, pitfalls, and crude watchtowers manned by vigilant Ork sentinels.
-
-    The fortress itself is a sprawling complex of interconnected longhouses, watchtowers, and barracks. Thick layers of snow and ice cover the roofs, providing additional insulation against the harsh winter winds. A massive, intricately carved gate adorned with the symbols of Ork war gods serves as the main entrance, guarded by heavily armed Ork warriors.
-
-    \n\n  Interior:
-    Upon entering the stronghold, visitors are greeted by a central courtyard covered in packed snow and surrounded by various buildings. The air is thick with the scent of burning wood from numerous hearths, and the sounds of blacksmiths hammering on anvils echo through the halls.
-
-    \n\n  Great Hall: The heart of Frostfang Fortress is the Great Hall, a colossal structure where the Ork chieftain holds court and feasts with his lieutenants. The walls are adorned with the spoils of monster hunts—trophies, skins, and fearsome weapons. A massive, crackling fire pit in the center bathes the hall in warmth, and the air is thick with the aroma of roasted meats.
-
-    \n\n  Barracks: The living quarters for the Ork warriors are a series of longhouses surrounding the Great Hall. Each longhouse is filled with bunk beds made of furs and animal hides. Ork war paint and tribal symbols decorate the walls, and the crude smell of weapon oils and armor permeates the air.
-
-    \n\n  Shaman's Hut: The fortress is home to a revered Ork shaman who communicates with the spirits of the taiga. The shaman's hut is adorned with mystical symbols, bones, and totems. A mystical aura fills the air, and the shaman's eerie chants can be heard echoing throughout the stronghold.
-
-    \n\n  Monster Trophy Room: One of the most impressive chambers in Frostfang Fortress is the Monster Trophy Room. Here, the Orks proudly display the heads, claws, and hides of the formidable monsters they have hunted. It serves as both a testament to their prowess and a warning to any who would dare challenge them.
-
-    \n\n  Activities and Lifestyle:
-    The Orks of Frostfang Fortress are a hardy and fierce people, known for their love of battle and hunting. They spend much of their time honing their combat skills, crafting weapons, and planning their next monster-hunting expeditions. The taiga provides ample opportunities for hunting dire wolves, yetis, and other magical creatures that inhabit the snowy wilderness.
-
-    \n\n  Surrounding Area:
-    The taiga around Frostfang Fortress is a treacherous and unforgiving landscape. The Orks venture deep into the wilderness to face off against fearsome monsters, bringing back trophies and resources to sustain their stronghold. The trees are twisted and covered in snow, and the frozen lakes conceal dangerous creatures beneath their icy surfaces.
-
-    Frostfang Fortress stands as a bastion of Ork strength in the frozen wilderness, a place where the call of battle and the thrill of the hunt echo through the taiga, leaving a mark on both the land and those who dare to challenge the might of the Orks.
+    Dungeon Name: Ember Sanctum TEST
+    \n
+    Description:
+    The Ember Sanctum is a subterranean labyrinth nestled beneath the ruins of an ancient monastery that once served as a bastion of light and knowledge. Now, the echoing halls are home to a tribe of cunning kobolds led by their fiery-eyed matriarch, Zarrin. The air is thick with the scent of earth and the faint aroma of smoldering embers, a testament to the pyromaniacal tendencies of the Kobold queen.
+    \n
+    Dungeon Layout:
+    The dungeon consists of a network of tunnels and chambers, with the ruins of the monastery acting as a deceptive facade above ground. Loose stones and dirt make navigation treacherous, concealing numerous traps and pitfalls set by the resourceful kobolds to deter intruders.
+    \n
+    Key Areas:
+    \n
+    Zarrin's Lair:
+    Zarrin, the Kobold Matriarch, resides in a cavernous chamber adorned with stolen trinkets and treasures. Her single eye glows with a mischievous glint, and the air is thick with the acrid scent of burning herbs. Beware of concealed flame traps that she has strategically placed to guard her lair.
+    \n
+    Ancient Altars:
+    Deep within the dungeon are remnants of the monastery's past. Dark sorcerers once held sway here, leaving behind ancient altars tainted with residual magic. These altars now serve as focal points for the kobolds' rituals and have been repurposed for their chaotic and often dangerous ceremonies.
+    \n
+    Stolen Storerooms:
+    The Kobolds have raided nearby villages, Morris's Rest and Featherington, accumulating a hoard of stolen goods. Storerooms within the dungeon are filled with pilfered supplies, from grain sacks to intricate jewelry. Kobold guards patrol these areas, ever watchful of potential thieves.
+    \n
+    Trap-filled Corridors:
+    The kobolds have ingeniously rigged many corridors with pressure plates, tripwires, and pitfalls. Unwary adventurers will find themselves falling prey to these traps if they aren't cautious. Kobold skirmishers often use these corridors to their advantage, ambushing intruders who trigger the traps.
+    \n
+    History:
+    Decades ago, dark sorcerers seized the monastery, desecrating its sacred halls with dark rituals. The residue of their malevolent magic lingers, giving the dungeon an eerie atmosphere. The monastery's fall paved the way for the kobolds to make the Ember Sanctum their home. Zarrin, with her penchant for fire, claimed the ruins as her domain and began orchestrating raids on nearby villages.
+    \nHooks for Adventurers:
+    \nRescue Mission:
+    Villagers from Morris's Rest and Featherington seek brave adventurers to rescue their stolen goods and loved ones taken captive by the kobolds.
+    \nAncient Artifacts:
+    Rumors speak of ancient artifacts hidden within the monastery's depths, drawing treasure hunters and scholars alike. Unbeknownst to them, the kobolds have already claimed these artifacts and incorporated them into their hoard.
+    \nDark Sorcery's Resurgence:
+    Scholars suspect that the dark sorcery once practiced in the monastery may be stirring again. An arcane order might task the adventurers with investigating and putting an end to any lingering dark magic.
+    The Ember Sanctum presents a multifaceted challenge, blending history, danger, and the mischievous nature of kobolds in a dynamic dungeon-crawling experience.
     """
+    ex_message = ex_message.split('\n')
+
     try:
         # Here you can implement logic to generate a response based on the received prompt
         # For simplicity, let's return a fixed message
@@ -46,103 +61,65 @@ def get_prompt_response():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
 
-@app.route('/generate-location', methods=['GET', 'POST'])
-def process_config():
+@app.route('/dreamsmith-get', methods=['GET'])
+def handle_get():
+    print("___Data GET___")
+    print(test_data)
     try:
-        print("____Data Here____")
-        data = request.get_json()
+        return jsonify({'success': True, 'message': test_data})
+    except Exception as ex1:
+        return jsonify({'success': False, 'error': str(ex1)})
+
+@app.route('/dreamsmith-post', methods=['GET', 'POST'])
+def handle_post():
+    try:
+        try:
+            data = request.get_json()
+        except Exception as e1:
+            print(e1)
+            data = request.get_json()
+        print("____Data____")
         print(data)
+        test_data = data
 
         # Extract data from the JSON request
-        parameters = {
-        'purpose': data.get('purpose'),
-        'natural_environment' :data.get('naturalEnvironment'),
-        'structural_design' :data.get('structuralDesign'),
-        'atmosphere' :data.get('atmosphere'),
-        'history' :data.get('history'),
-        'notables' :data.get('notables'),
-        'mysteries' :data.get('mysteries'),
-        'culture' :data.get('culture'),
-        'lootAndRumors' :data.get('lootAndRumors'),
-        'recent_influence' :data.get('recentInfluence'),
-        'map_legend' :data.get('mapLegend'),
-        'room_legend' :data.get('roomLegend'),
-        'inhabitants' :data.get('inhabitants')
-        }
+        #parameters = {
+        #    'purpose': data.get('purpose'),
+        #    'natural_environment' :data.get('naturalEnvironment'),
+        #    'structural_design' :data.get('structuralDesign'),
+        #    'atmosphere' :data.get('atmosphere'),
+        #    'history' :data.get('history'),
+        #    'notables' :data.get('notables'),
+        #    'mysteries' :data.get('mysteries'),
+        #    'culture' :data.get('culture'),
+        #    'lootAndRumors' :data.get('lootAndRumors'),
+        #    'recent_influence' :data.get('recentInfluence'),
+        #    'map_legend' :data.get('mapLegend'),
+        #    'room_legend' :data.get('roomLegend'),
+        #    'inhabitants' :data.get('inhabitants')
+        #}
 
         # Call genResponse to aquire OpenAI output
-        response_dict = gen_response(parameters)
-
-        dreamsmith_id = gen_dreamsmith_id()
-        print(dreamsmith_id)
-
-        chatbot_configs[dreamsmith_id] = response_dict
-
-        response_dict['dreamsmith_ID'] = dreamsmith_id
+        #response_dict = gen_response(parameters)
+        #print("Data type is: " + str(type(response_dict)))
+#
+        #dreamsmith_id = gen_dreamsmith_id()
+        #print("______ID Created_______:")
+        #print(dreamsmith_id)
+#
+        #chatbot_configs[dreamsmith_id] = response_dict
+#
+        #response_dict['dreamsmith_ID'] = dreamsmith_id
+        #response_dict = "Hello"
 
         # Return a response
-        return jsonify(response_dict)
+        #res = jsonify(response_dict)
+        #print("______Jsonify_______:")
+        #print(res)
 
-    except Exception as e:
-        # Handle exceptions appropriately
-        print({str(e)})
-        print(f"Error processing configuration: {str(e)}")
-        return jsonify({'responseMessage': 'Error processing configuration'}), 500
-
-
-#########################################################################
-    
-def gen_dreamsmith_id():
-    new_ID = ''.join(random.choices(string.ascii_uppercase+string.digits, k=6))
-    return new_ID
-
-def gen_response(parameters):
-    # Construct a prompt using the parameters
-    prompt = "Your role will be as an extension to a creative storyteller's (known as 'User') brain for Dungeons and Dragons. You are optimzied to be detail orientated and flexible to allow the 'User' to be the main driver for creativity. Your main knowledge base is sourced from anthropology, cultural/historical study of myths and civilizations, and fantasy storytelling. The 'User' will provide input parameters for you to use and explore so that the 'User' can flesh out their campaigns, characters, and storylines.\n\n"
-    prompt += f"Create a {parameters['purpose']} with the following objective: "
-    if parameters['purpose'] == 'Village':
-        prompt += "Populate this location with a Village name. Include at least 2 notable individuals and at least 4 key buildings.\n\n"
-    elif parameters['purpose'] == 'Town':
-        prompt += "Populate this location with a Town name. Include at least 5 notable individuals and at least 9 key buildings. There should be at least 1 tavern/inn and 1 general store. List any organizations or guilds found in this city. Provide a brief description on the social structure, political structure, and economic welfare of the town. \n\n"
-    elif parameters['purpose'] == 'Dungeon':
-        prompt += "Populate this dungeon/encounter with a name and affiliated creature or organization based on user input. Design rooms, loot, and characters/creatures that share a theme with this location's description. Optionally, include traps or puzzles if applicable.\n\n"
-    else:
-        prompt += "Populate this building with a name and purpose based on user input. Design rooms, items, and characters/creatures that share a theme with this location's description.\n\n"
-
-    prompt += "Include the following details:\n"
-    prompt += f"Natural Environment: {parameters['natural_environment']}\n"
-    prompt += f"Architectural/Structural Design: {parameters['structural_design']}\n"
-    prompt += f"Atmosphere and Theme: {parameters['atmosphere']}\n"
-    prompt += f"History: {parameters['history']}\n"
-    prompt += f"Notable Characters or Creatures: {parameters['notables']}\n"
-    prompt += f"Secrets and Mysteries: {parameters['mysteries']}\n"
-    prompt += f"Cultures and Traditions: {parameters['culture']}\n"
-    prompt += f"Items, Rumors, Secrets, and Treasure: {parameters['lootAndRumors']}\n"
-    prompt += f"Recent Events at Location: {parameters['recent_influence']}\n"
-    prompt += f"Population and Inhabitants: {parameters['inhabitants']}\n"
-
-    # Call OpenAI API to get a response
-    #gpt_response = openai.Completion.create(
-    #    engine="text-davinci-002",  # Choose the appropriate engine
-    #    prompt=prompt,
-    #    max_tokens=150,  # Adjust as needed
-    #    n=1,
-    #    stop=None,
-    #    temperature=0.7,
-    #)
-
-    # Extract the generated response
-    generated_response = prompt
-
-    # Create a JSON-like dict to return
-    response_dict = {
-        'generated_response': generated_response,
-        'additional_info': 'Any additional info you want to include',
-    }
-    print("____Response Here____")
-    print(response_dict)
-
-    return response_dict
+        return jsonify({'success': True, 'message': "Hello"})
+    except Exception as e2:
+        return jsonify({'success': False, 'error': str(e2)})
 
 if __name__ == '__main__':
     app.run(debug=True)

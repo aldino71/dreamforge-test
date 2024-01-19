@@ -7,6 +7,7 @@ import About from './components/About';
 import ChatBot from './components/ChatBot';
 import Navigator from './components/Navigator';
 import './App.css';
+import GeneratedLocation from './components/GeneratedLocation';
 
 const App = () => {
   return (
@@ -17,7 +18,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
-          <Route path="/chatbot/*" element={<ChatBot />} />
+          <Route path="/dreamsmith/*" element={<ChatBot />} />
+          <Route path="/generated-location-test" element={<GeneratedLocation/>} />
         </Routes>
       </Router>
     </div>

@@ -24,7 +24,7 @@ function Navigator() {
             <Link to="/">Home</Link>
           </li>
           <li>
-            <Link to="/chatbot">Create Dreamsmith</Link>
+            <Link to="/dreamsmith">Create Dreamsmith</Link>
           </li>
           <li>
             <Link to="/about">About</Link>
